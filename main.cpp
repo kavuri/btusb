@@ -14,7 +14,9 @@ int main(int argc, char *argv[])
     */
     
     BTTest bttest;
-    bttest.addServiceRecord ();
+    quint32 id = bttest.addServiceRecord ();
+    
+    bttest.removeServiceRecord (id);
 
     return a.exec();
 }

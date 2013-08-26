@@ -38,7 +38,7 @@ BTTest::addServiceRecord ()
         qDebug () << "Could not find service interface: " << serviceIface.lastError ();
         return -1;
     }
-    
+
     // Read service record file
     QFile file ("syncml_server_sdp_record.xml");
     if (!file.open (QIODevice::ReadOnly))
@@ -64,4 +64,37 @@ BTTest::addServiceRecord ()
 void
 BTTest::removeServiceRecord (quint32 recordHandle)
 {
+    // Initialize dbus
+    QDBusInterface mgrIface ("org.bluez", "/", "org.bluez.Manager", QDBusConnection::systemBus ());
+    if (!mgrIface.isValid ())
+    {
+        qDebug () << "Unable to initialize bluez manager interface";
+        return ;
+    }
+    
+    QDBusReply<QDBusObjectPath> reply = mgrIface.call (QLatin1String ("DefaultAdapter"));
+    if (!reply.isValid ())
+    {
+        qDebug () << "Default adapter path not found";
+        return ;
+    }
+    
+    QString defaultAdapterPath = reply.value ().path ();
+    
+    qDebug () << "Path:" << defaultAdapterPath;
+    
+    QDBusInterface serviceIface ("org.bluez", defaultAdapterPath, "org.bluez.Service", QDBusConnection::systemBus() );
+    
+    if(!serviceIface.isValid ())
+    {
+        qDebug () << "Could not find service interface: " << serviceIface.lastError ();
+        return ;
+    }
+
+    QDBusReply<void> response = serviceIface.call (QLatin1String ("RemoveRecord"), recordHandle);
+    
+    if (!response.isValid ())
+    {
+        qDebug () << "Unable to remove service record";
+    }
 }

@@ -2,6 +2,7 @@
 #define BTTEST_H
 
 #include <QObject>
+#include <QtDBus>
 
 class BTTest : public QObject
 {
