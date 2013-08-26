@@ -23,9 +23,12 @@ signals:
 
     void dataReady (int fd);
 
+    void socketClosed (int fd);
+
 protected slots:
 
     void socketActivated (int fd);
+
 private:
 
     bool isFdValid ();

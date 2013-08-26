@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core
+QT       += core dbus
 
 QT       -= gui
 
@@ -18,7 +18,9 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    USBConnector.cpp
+    USBConnector.cpp \
+    BTTest.cpp
 
 HEADERS += \
-    USBConnector.h
+    USBConnector.h \
+    BTTest.h

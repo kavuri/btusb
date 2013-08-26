@@ -76,7 +76,15 @@ void
 USBConnector::socketActivated (int fd)
 {
     qDebug () << "Read socket activated with fd" << fd;
-    emit dataReady (fd);
+    char buffer[1024];
+        if (read (fd, buffer, 1024) > 0)
+            qDebug () << buffer;
+        else {
+            qDebug () << "socket is closed";
+            emit socketClosed (fd);
+        }
+
+    //emit dataReady (fd);
 }
 
 bool
