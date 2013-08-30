@@ -2,6 +2,10 @@
 
 #include "USBConnector.h"
 #include "BTTest.h"
+#include <QString>
+#include <QDebug>
+#include "BTServer.h"
+#include "BTClient.h"
 
 int main(int argc, char *argv[])
 {
@@ -13,10 +17,20 @@ int main(int argc, char *argv[])
     usb.openUSB ();
     */
     
-    BTTest bttest;
-    quint32 id = bttest.addServiceRecord ();
-    
-    bttest.removeServiceRecord (id);
+    QString cmd (argv[1]);
+    if (cmd == "s")
+    {
+        qDebug () << "Starting bt server...";
+        BTServer server;
+        server.startListen ();
+    } else
+    {
+        BTClient client;
+        client.connectToServer ();
+    }
 
-    return a.exec();
+    //quint32 id = bttest.addServiceRecord ();
+    //bttest.removeServiceRecord (id);
+
+    return 0;
 }
