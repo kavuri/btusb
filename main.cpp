@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
     usb.openUSB ();
     */
     
+    /*
     QString cmd (argv[1]);
     if (cmd == "s")
     {
@@ -28,9 +29,12 @@ int main(int argc, char *argv[])
         BTClient client;
         client.connectToServer ();
     }
+    */
+    
+    BTClient* btclient = new BTClient();
 
     //quint32 id = bttest.addServiceRecord ();
     //bttest.removeServiceRecord (id);
 
-    return 0;
+    return a.exec ();
 }

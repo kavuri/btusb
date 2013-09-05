@@ -5,7 +5,20 @@
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/rfcomm.h>
 
-BTClient::BTClient()
+#include <QDBusConnection>
+#include <QVariant>
+#include <QDebug>
+
+BTClient::BTClient(QObject *parent) : QObject (parent)
+{
+    QDBusConnection bus = QDBusConnection::systemBus ();
+    bool success = bus.connect ("org.bluez", "", "org.bluez.Adapter", "PropertyChanged", this, SLOT (btStateChanged (QString, QDBusVariant)));
+    qDebug () << success;
+    if (success == false)
+        qWarning("Cannot connect to org.bluez.Adapter::PropertyChanged signal.");
+}
+
+BTClient::~BTClient ()
 {
 }
 
@@ -26,7 +39,7 @@ BTClient::connectToServer ()
     str2ba( dest, &addr.rc_bdaddr );
 
     // connect to server
-    status = connect(s, (struct sockaddr *)&addr, sizeof(addr));
+    //status = connect(s, (struct sockaddr *)&addr, sizeof(addr));
 
     // send a message
     if( status == 0 ) {
@@ -36,4 +49,11 @@ BTClient::connectToServer ()
     if( status < 0 ) perror("uh oh");
 
     close(s);
+}
+
+void
+BTClient::btStateChanged (QString key, QDBusVariant value)
+{
+    QVariant v = value.variant ();
+    qDebug () << "Property:" << key << " changed to " << v.toString ();
 }
